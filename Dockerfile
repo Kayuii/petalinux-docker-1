@@ -10,7 +10,9 @@ ARG UBUNTU_MIRROR=mirror.tuna.tsinghua.edu.cn
 RUN sed -i.bak s/archive.ubuntu.com/${UBUNTU_MIRROR}/g /etc/apt/sources.list && \
   dpkg --add-architecture i386 && apt-get update &&  DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
   build-essential \
+  gcc \
   sudo \
+  make \
   tofrodos \
   iproute2 \
   gawk \
@@ -31,15 +33,20 @@ RUN sed -i.bak s/archive.ubuntu.com/${UBUNTU_MIRROR}/g /etc/apt/sources.list && 
   libglib2.0-dev \
   lib32z1-dev \
   zlib1g:i386 \
+  zlib1g-dev \
   libgtk2.0-0 \
   screen \
+  dialog \
   pax \
   diffstat \
   xvfb \
   xterm \
+  konsole \
+  nano \
   texinfo \
   gzip \
   unzip \
+  tar \
   cpio \
   chrpath \
   autoconf \
@@ -89,3 +96,4 @@ WORKDIR /home/vivado/project
 #add vivado tools to path
 RUN echo "source /opt/Xilinx/petalinux/settings.sh" >> /home/vivado/.bashrc
 
+RUN sudo apt update && sudo apt -y upgrade
