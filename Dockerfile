@@ -8,7 +8,9 @@ MAINTAINER z4yx <z4yx@users.noreply.github.com>
 RUN sed -i.bak s/archive.ubuntu.com/mirror.tuna.tsinghua.edu.cn/g /etc/apt/sources.list && \
   dpkg --add-architecture i386 && apt-get update && apt-get install -y \
   build-essential \
+  gcc \
   sudo \
+  make \
   tofrodos \
   iproute2 \
   gawk \
@@ -28,15 +30,20 @@ RUN sed -i.bak s/archive.ubuntu.com/mirror.tuna.tsinghua.edu.cn/g /etc/apt/sourc
   libglib2.0-dev \
   lib32z1-dev \
   zlib1g:i386 \
+  zlib1g-dev \
   libgtk2.0-0 \
   screen \
+  dialog \
   pax \
   diffstat \
   xvfb \
   xterm \
+  konsole \
+  nano \
   texinfo \
   gzip \
   unzip \
+  tar \
   cpio \
   chrpath \
   autoconf \
@@ -64,7 +71,7 @@ RUN chmod a+x /${PETA_RUN_FILE} && \
   chmod 777 /tmp /opt/Xilinx && \
   cd /tmp && \
   sudo -u vivado /accept-eula.sh /${PETA_RUN_FILE} /opt/Xilinx/petalinux && \
-  rm -f /${PETA_RUN_FILE} /accept-eula.sh 
+  rm -f /${PETA_RUN_FILE} /accept-eula.sh
 
 USER vivado
 ENV HOME /home/vivado
@@ -75,3 +82,4 @@ WORKDIR /home/vivado/project
 #add vivado tools to path
 RUN echo "source /opt/Xilinx/petalinux/settings.sh" >> /home/vivado/.bashrc
 
+RUN sudo apt update && sudo apt -y upgrade
