@@ -3,10 +3,13 @@ FROM ubuntu:18.04
 MAINTAINER z4yx <z4yx@users.noreply.github.com>
 
 # build with: docker build --build-arg PETA_VERSION=2019.2 --build-arg PETA_RUN_FILE=petalinux-v2019.2-final-installer.run -t petalinux:2019.2 .
-
 #install dependences:
-RUN sed -i.bak s/archive.ubuntu.com/mirror.tuna.tsinghua.edu.cn/g /etc/apt/sources.list && \
-  dpkg --add-architecture i386 && apt-get update && apt-get install -y \
+RUN sed -i.bak s/archive.ubuntu.com/mirror.dotsrc.org/g /etc/apt/sources.list && \
+  dpkg --add-architecture i386 && apt-get update
+
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
+
+RUN apt-get install -y \
   build-essential \
   gcc \
   sudo \
@@ -51,12 +54,21 @@ RUN sed -i.bak s/archive.ubuntu.com/mirror.tuna.tsinghua.edu.cn/g /etc/apt/sourc
   libtool \
   libtool-bin \
   locales \
-  git
+  git \
+  python \
+  rsync
 
 ARG PETA_VERSION
 ARG PETA_RUN_FILE
 
-RUN locale-gen en_US.UTF-8 && update-locale
+# Set the locale
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+COPY ./keyboard /etc/default/keyboard
 
 #make a Vivado user
 RUN adduser --disabled-password --gecos '' vivado && \
